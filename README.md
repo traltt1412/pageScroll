@@ -1,0 +1,1 @@
+Default front-end boilerplate for fast development.

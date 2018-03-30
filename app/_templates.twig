@@ -1,0 +1,70 @@
+{% extends "_templates/layout.twig" %}
+
+{% block page %}
+<div class="container">
+  <a href="#0" class="btn-burger" data-module="ToggleClass">
+    <span>Menu</span>
+  </a>
+
+  <a href="#0" class="hamburger" data-module="ToggleClass">Menu</a>
+
+  <ul>
+    {% for item in menu %}
+      <li><a href="{{ item.link }}">{{ item.name }}</a></li>
+    {% endfor %}
+  </ul>
+
+  <section>
+    <div class="icon icon-mr-bean"></div>
+    <div class="icon-inline icon-ffff"></div>
+    <div class="icon-inline icon-tttt"></div>
+    <div class="icon-inline icon-modal-close"></div>
+  </section>
+
+  <section>
+    <h3>Checkbox</h3>
+    <div class="checkbox-wrapper">
+      <input type="checkbox" id="cb-01">
+      <label for="cb-01">Checkbox 1</label>
+    </div>
+    <div class="checkbox-wrapper">
+      <input type="checkbox" id="cb-02">
+      <label for="cb-02">Checkbox 2</label>
+    </div>
+  </section>
+
+  <section>
+    <h3>Radio</h3>
+    <div class="radio-wrapper">
+      <input type="radio" id="rdo-01" name="rdo-set-01">
+      <label for="rdo-01">Radio 1</label>
+    </div>
+    <div class="radio-wrapper">
+      <input type="radio" id="rdo-02" name="rdo-set-01">
+      <label for="rdo-02">Radio 2</label>
+    </div>
+  </section>
+
+  <br>
+
+  <div class="row">
+    <div class="col-3">
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus reprehenderit necessitatibus veritatis? Libero aliquam quia dolor quam ea alias mollitia nesciunt sequi totam saepe. Hic excepturi, saepe facere asperiores alias.
+    </div>
+    <div class="col-9">
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Distinctio placeat quaerat culpa totam hic debitis, omnis, soluta, autem dolorem nostrum ex aperiam quo fuga excepturi aut dolores voluptates repellendus voluptatum?
+    </div>
+  </div>
+
+  <br>
+
+  <div class="row">
+    <div class="col-40">
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet in natus commodi, eaque quia, temporibus illum voluptas laborum ullam et fuga! A hic, vitae odit, ipsa aliquid aut officia soluta?
+    </div>
+    <div class="col-60">
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi quis possimus rerum saepe. Quia mollitia veritatis modi dolore adipisci, temporibus, iusto, facere id eum dignissimos, dolor autem accusantium odio totam.
+    </div>
+  </div>
+</div>
+{% endblock %}

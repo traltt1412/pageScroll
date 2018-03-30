@@ -1,0 +1,40 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title }}</title>
+
+  <link rel="icon" type="image/png" href="{{assetPath}}/images/favicons/favicon-32x32.png" sizes="32x32" />
+  <link rel="icon" type="image/png" href="{{assetPath}}/images/favicons/favicon-16x16.png" sizes="16x16" />
+
+	<!-- build:css {{assetPath}}/css/vendor.css -->
+	<!-- bower:css -->
+	<!-- endbower -->
+	<!-- endbuild -->
+
+	<!-- build:css {{assetPath}}/css/app.css -->
+	<link rel="stylesheet" href="{{assetPath}}/css/app.css">
+	<!-- endbuild -->
+</head>
+
+<body>
+
+<!-- HEADER -->
+{% include 'header.twig' %}
+<!-------------------->
+
+<!-- MAIN CONTENT -->
+{% block page %}{% endblock %}
+<!-------------------->
+
+<!-- FOOTER -->
+{% include 'footer.twig' %}
+<!-------------------->
+
+
+<script src="{{assetPath}}/js/app.js"></script>
+
+</body>
+</html>

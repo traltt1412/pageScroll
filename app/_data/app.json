@@ -1,0 +1,16 @@
+{
+	"assetPath": "assets",
+	"title": "Default Project",
+	"menu":[
+		{
+			"name": "Home",
+			"link": "index.html",
+			"sub": null
+		},
+		{
+			"name": "Test",
+			"link": "test.html",
+			"sub": null
+		}
+	]
+}
