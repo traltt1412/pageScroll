@@ -10,6 +10,7 @@ export default class pageScroll {
 			top = el.scrollTop,
 			scrollDuration = 400,
 			touchY;
+		let wheelEvent = getWheelEvent();
 		let init = e => {
 			for (let i = 0; i < sections.length; i++) {
 				if (sections[i].offsetTop == top) {
@@ -20,7 +21,6 @@ export default class pageScroll {
 			el.addEventListener(wheelEvent, (e) => {
 				e.preventDefault();
 				let deltaY = e.deltaY || -e.wheelDelta;
-				console.log(deltaY);
 				if (scrollable) {
 					let scrollTo = calcScrollTop(deltaY);
 					if (scrollTo !== false) {
@@ -32,7 +32,7 @@ export default class pageScroll {
 					} else {
 						setTimeout(() => {
 							el.scrollTop = el.scrollTop + deltaY;
-						},1);
+						}, 1);
 					}
 				}
 			});
@@ -58,7 +58,7 @@ export default class pageScroll {
 		};
 		init();
 
-		let calcScrollTop = deltaY => {
+		function calcScrollTop(deltaY) {
 			if (active > 0 && el.scrollTop + deltaY < sections[active].offsetTop) {
 				el.getElementsByClassName('active')[0].classList.remove('active');
 				sections[--active].classList.add('active');
@@ -72,7 +72,7 @@ export default class pageScroll {
 			return false;
 		}
 
-		let scrollToSectionAnimate = (scrollTo, scrollDuration) => {
+		function scrollToSectionAnimate(scrollTo, scrollDuration) {
 			const scrollHeight = el.scrollTop - scrollTo,
 				scrollStep = Math.PI / (scrollDuration / 15),
 				cosParameter = scrollHeight / 2;
@@ -92,19 +92,17 @@ export default class pageScroll {
 		}
 
 		// detect available wheel event
-		let wheelEvent = () => {
+		function getWheelEvent() {
 			if ('onwheel' in el) {
 				// spec event type
-				wheelEvent = 'wheel';
+				return 'wheel';
 			} else if (el.onmousewheel !== undefined) {
 				// legacy event type
-				wheelEvent = 'mousewheel';
+				return 'mousewheel';
 			} else {
 				// older Firefox
-				wheelEvent = 'DOMMouseScroll';
+				return 'DOMMouseScroll';
 			}
-			return wheelEvent;
 		}
 	}
-
 }
