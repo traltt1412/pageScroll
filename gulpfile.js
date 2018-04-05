@@ -1,4 +1,5 @@
 const gulp = require('gulp');
+const babel = require('gulp-babel');
 const gulpLoadPlugins = require('gulp-load-plugins');
 const browserSync = require('browser-sync').create();
 const del = require('del');
@@ -20,16 +21,21 @@ let config = {
   "src": {
     "css": "app/"+ assetPath +"/css/app.scss",
     "js": "app/"+ assetPath +"/js/*.js",
+    "scripts": "app/"+ assetPath +"/scripts/*.js",
     "fonts": "app/"+ assetPath +"/fonts/*.ttf"
   },
   "tmp": {
     "css": ".tmp/"+ assetPath +"/css",
     "js": ".tmp/"+ assetPath +"/js",
+    "scripts": ".tmp/"+ assetPath +"/scripts",
+    "scripts_es5": ".tmp/"+ assetPath +"/scripts_es5",
     "fonts": ".tmp/"+ assetPath +"/fonts"
   },
   "dist": {
     "css": "dist/"+ assetPath +"/css",
     "js": "dist/"+ assetPath +"/js",
+    "scripts": "dist/"+ assetPath +"/scripts",
+    "scripts_es5": "dist/"+ assetPath +"/scripts_es5",
     "fonts": "dist/"+ assetPath +"/fonts",
     "img": "dist/"+ assetPath +"/images"
   }
@@ -64,6 +70,10 @@ gulp.task('js-watch', ['js'], function (done) {
   browserSync.reload();
   done();
 });
+gulp.task('scripts-watch', ['scripts'], function (done) {
+  browserSync.reload();
+  done();
+});
 
 gulp.task('js', () => {
   return gulp.src(config.src.js)
@@ -75,6 +85,27 @@ gulp.task('js', () => {
     }))
     .pipe(webpackStream(require('./webpack.dev.js'), webpack))
     .pipe(gulp.dest(config.tmp.js))
+    .pipe($.plumber.stop());
+});
+
+gulp.task('scripts', () => {
+  return gulp.src(config.src.scripts)
+    .pipe($.plumber({
+      errorHandler: function(err) {
+        console.log(err);
+        this.emit('end');
+      }
+    }))
+    .pipe(gulp.dest(config.tmp.scripts))
+    .pipe($.plumber.stop());
+});
+
+gulp.task('transpile', function(){
+  return gulp.src(config.src.scripts)
+    .pipe(babel({
+      "presets": ["es2015"]
+    }))
+    .pipe(gulp.dest(config.tmp.scripts_es5))
     .pipe($.plumber.stop());
 });
 
@@ -96,7 +127,19 @@ gulp.task('build:js', () => {
     .pipe($.plumber.stop());
 });
 
-gulp.task('html', ['css', 'build:js'], () => {
+gulp.task('build:scripts', () => {
+  return gulp.src(config.src.scripts)
+    .pipe($.plumber({
+      errorHandler: function(err) {
+        console.log(err);
+        this.emit('end');
+      }
+    }))
+    .pipe(gulp.dest(config.dist.scripts))
+    .pipe($.plumber.stop());
+});
+
+gulp.task('html', ['css', 'build:js', 'build:scripts'], () => {
   let indexTwig = gulp.src([
     'app/index.twig',
     '!app/'+ assetPath +'/**'
@@ -190,7 +233,8 @@ gulp.task('extras', () => {
     '!app/'+ assetPath +'/images/sprites-retina',
     '!app/'+ assetPath +'/images/sprites',
     '!app/'+ assetPath +'/images/sprites-retina/**',
-    '!app/'+ assetPath +'/images/sprites/**'
+    '!app/'+ assetPath +'/images/sprites/**',
+    '.tmp/assets/scripts_es5/*.*'
   ], {
     dot: true
   }).pipe(gulp.dest('dist'));
@@ -215,7 +259,7 @@ gulp.task('clean', function() {
 });
 
 gulp.task('serve', () => {
-  runSequence(['wiredep', 'twig', 'sprite'], ['css', 'js', 'fonts'], () => {
+  runSequence(['wiredep', 'twig', 'sprite'], ['css', 'js', 'scripts', 'transpile', 'fonts'], () => {
     browserSync.init({
       notify: false,
       port: 9000,
@@ -240,6 +284,7 @@ gulp.task('serve', () => {
     gulp.watch(['app/**/*.twig', 'app/_data/app.json'], ['twig-watch']);
     gulp.watch('app/'+ assetPath +'/css/**/*.scss', ['css']);
     gulp.watch('app/'+ assetPath +'/js/**/*.js', ['js-watch']);
+    gulp.watch('app/'+ assetPath +'/scripts/**/*.js', ['scripts-watch']);
     gulp.watch('app/'+ assetPath +'/images/icons/**/*.png', ['sprite']);
     gulp.watch('app/'+ assetPath +'/images/sprites/**/*.png', ['sprite']);
     gulp.watch('app/'+ assetPath +'/fonts/**/*', ['fonts']);
